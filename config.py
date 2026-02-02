@@ -1,4 +1,7 @@
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 DEVICE_ID = os.getenv("DEVICE_ID", "device001")
 
