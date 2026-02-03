@@ -65,6 +65,15 @@ if [ "$IS_PI" = true ]; then
 
   echo -e "${YELLOW}🔍 Scanning I2C bus...${NC}"
   i2cdetect -y 1 || true
+
+  echo -e "${YELLOW}🌡️ Enabling 1-Wire interface for DS18B20...${NC}"
+  if ! grep -q "^dtoverlay=w1-gpio" /boot/config.txt 2>/dev/null; then
+    echo "dtoverlay=w1-gpio" | sudo tee -a /boot/config.txt
+    echo -e "${YELLOW}⚠️  1-Wire enabled — reboot required after install!${NC}"
+  else
+    echo -e "${GREEN}✅ 1-Wire already enabled${NC}"
+  fi
+
 else
   echo -e "${YELLOW}ℹ️  Skipping Raspberry Pi specific setup${NC}"
 fi

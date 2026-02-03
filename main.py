@@ -2,10 +2,9 @@ import time
 import logging
 
 from mqtt_client import MQTTNode
-from sensors.temperature import read_temperature
+from sensors import temperature
+from sensors import light
 from sensors.moisture import read_moisture
-from sensors.light import read_light
-from sensors.light import init as light_init
 from config import PUBLISH_INTERVAL
 
 logging.basicConfig(level=logging.INFO)
@@ -17,7 +16,7 @@ def build_sensor_payload():
     sensors.append({
         "type": "temperature",
         "id": "temp-sensor-001",
-        "value": read_temperature()
+        "value": temperature.read_temperature()
     })
 
     # Moisture (multiple probes)
@@ -37,14 +36,15 @@ def build_sensor_payload():
     sensors.append({
         "type": "light",
         "id": "light-sensor-001",
-        "value": read_light()
+        "value": light.read_light()
     })
 
     return sensors
 
 def main():
     # init hardware
-    light_init()
+    light.init()
+    temperature.init()
 
     node = MQTTNode()
     node.connect()

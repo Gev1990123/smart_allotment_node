@@ -18,7 +18,7 @@ ads = ADS1115(i2c)
 # These IDs must match what you publish in MQTT
 SOIL_PROBES = {
     "soil-sensor-001": {"channel": 0, "dry": 2.48, "wet": 1.00},
-    "soil-sensor-002": {"channel": 1, "dry": 2.48, "wet": 1.00},
+    #"soil-sensor-002": {"channel": 1, "dry": 2.48, "wet": 1.00},
 }
 
 # =============================
