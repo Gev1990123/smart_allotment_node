@@ -12,8 +12,8 @@ logger = logging.getLogger("pump")
 PUMP_GPIO = 17
 
 # Relay logic — change if needed
-RELAY_ACTIVE = GPIO.LOW if GPIO else None
-RELAY_INACTIVE = GPIO.HIGH if GPIO else None
+RELAY_ACTIVE = GPIO.HIGH if GPIO else None
+RELAY_INACTIVE = GPIO.LOW if GPIO else None
 
 _initialized = False
 _pump_lock = threading.Lock()
