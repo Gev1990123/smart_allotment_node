@@ -1,2 +1,15 @@
-paho-mqtt
+# General dependencies
 python-dotenv
+
+# MQTT
+paho-mqtt==1.6.1
+
+# Adafruit Blinka (enables board + busio on Raspberry Pi)
+adafruit-blinka==8.22.0
+
+# ADS1115 ADC driver
+adafruit-circuitpython-ads1x15==2.2.21
+
+# Optional (but useful for light sensor if using TSL2561, BH1750, etc)
+adafruit-circuitpython-busdevice==5.2.9
+adafruit-circuitpython-register==1.9.16
