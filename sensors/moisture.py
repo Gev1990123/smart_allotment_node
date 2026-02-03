@@ -3,7 +3,6 @@ import board
 import busio
 from adafruit_ads1x15.ads1115 import ADS1115
 from adafruit_ads1x15.analog_in import AnalogIn
-from adafruit_ads1x15.ads1x15 import Pin
 
 logger = logging.getLogger("moisture")
 
@@ -18,16 +17,8 @@ ads = ADS1115(i2c)
 # =============================
 # These IDs must match what you publish in MQTT
 SOIL_PROBES = {
-    "soil-sensor-001": {
-        "channel": Pin.A0,
-        "dry": 2.48,
-        "wet": 1.00,
-    },
-    "soil-sensor-002": {
-        "channel": Pin.A1,
-        "dry": 2.48,
-        "wet": 1.00,
-    },
+    "soil-sensor-001": {"channel": 0, "dry": 2.48, "wet": 1.00},
+    "soil-sensor-002": {"channel": 1, "dry": 2.48, "wet": 1.00},
 }
 
 # =============================
