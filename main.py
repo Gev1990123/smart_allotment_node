@@ -5,6 +5,7 @@ from mqtt_client import MQTTNode
 from sensors import temperature
 from sensors import light
 from sensors.moisture import read_moisture
+from pump import pump_control
 from config import PUBLISH_INTERVAL
 
 logging.basicConfig(level=logging.INFO)
@@ -45,6 +46,7 @@ def main():
     # init hardware
     light.init()
     temperature.init()
+    pump_control.init()
 
     node = MQTTNode()
     node.connect()
