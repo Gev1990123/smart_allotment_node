@@ -1,14 +1,14 @@
 import json
 import logging
 import paho.mqtt.client as mqtt
-from config import DEVICE_ID, MQTT_HOST, MQTT_PORT, MQTT_USER, MQTT_PASS
+from config import DEVICE_UID, MQTT_HOST, MQTT_PORT, MQTT_USER, MQTT_PASS
 from pump import pump_control    
 
 logger = logging.getLogger(__name__)
 
 class MQTTNode:
     def __init__(self):
-        self.client = mqtt.Client(client_id=DEVICE_ID)
+        self.client = mqtt.Client(client_id=DEVICE_UID)
         self.client.on_connect = self.on_connect
         self.client.on_message = self.on_message
 
@@ -24,14 +24,14 @@ class MQTTNode:
         logger.info(f"MQTT connected with rc={rc}")
 
         # Subscribe to pump commands for this node
-        topic = f"pump/{DEVICE_ID}"
+        topic = f"pump/{DEVICE_UID}"
         self.client.subscribe(topic, qos=1)
         logger.info(f"Subscribed to {topic} for pump commands")
 
     def publish_sensors(self, sensors):
-        topic = f"sensors/{DEVICE_ID}/data"
+        topic = f"sensors/{DEVICE_UID}/data"
         payload = {
-            "device_id": DEVICE_ID,
+            "device_uid": DEVICE_UID,
             "sensors": sensors
         }
 
@@ -43,5 +43,5 @@ class MQTTNode:
         payload = json.loads(msg.payload.decode())
         logger.info(f"MQTT message received on {topic}: {payload}")
 
-        if topic == f"pump/{DEVICE_ID}":
+        if topic == f"pump/{DEVICE_UID}":
             pump_control.handle_pump_command(payload)
