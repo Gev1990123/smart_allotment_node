@@ -43,5 +43,5 @@ class MQTTNode:
         payload = json.loads(msg.payload.decode())
         logger.info(f"MQTT message received on {topic}: {payload}")
 
-        if topic.endswith(f"pump/{DEVICE_ID}"):
+        if topic == f"pump/{DEVICE_ID}":
             pump_control.handle_pump_command(payload)
