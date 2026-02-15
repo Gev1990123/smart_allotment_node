@@ -17,7 +17,15 @@ class MQTTNode:
 
     def connect(self):
         logger.info(f"Connecting to MQTT {MQTT_HOST}:{MQTT_PORT}")
-        self.client.connect(MQTT_HOST, MQTT_PORT, 60)
+        logger.info(f"Using credentials: {MQTT_USER}:{'***' if MQTT_PASS else 'none'}")
+
+        if MQTT_USER:
+            self.client.username_pw_set(MQTT_USER, MQTT_PASS)
+        else:
+            logger.warning("No MQTT credentials - anonymous access")
+
+        result = self.client.connect(MQTT_HOST, MQTT_PORT, 60)
+        logger.info(f"Connect result code: {result}")
         self.client.loop_start()
 
     def on_connect(self, client, userdata, flags, rc):
