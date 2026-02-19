@@ -11,7 +11,7 @@ logger = logging.getLogger("light")
 # =============================
 
 # Default BH1750 I2C address (0x23 is most common)
-BH1750_ADDRESS = 0x23
+BH1750_ADDRESS = 0x5C
 
 # =============================
 # GLOBAL STATE
