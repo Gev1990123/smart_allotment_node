@@ -51,10 +51,10 @@ def read_moisture(probe_id: str):
         cfg = SOIL_PROBES[probe_id]
 
         voltage = channel.voltage
-        logger.info(f"RAW: {channel.value}, V={voltage:.3f}")  # Add this
+        #logger.info(f"RAW: {channel.value}, V={voltage:.3f}")
 
         # Clamp voltage to calibration range
-        # voltage = max(min(voltage, cfg["dry"]), cfg["wet"])
+        voltage = max(min(voltage, cfg["dry"]), cfg["wet"])
 
 
         # Convert voltage to percentage
