@@ -41,9 +41,19 @@ def init():
 
     logger.info(f"🌡️ Temperature sensors ready: {len(SENSORS)}")
     _initialized = True
+# =============================
+# Read all temperatures (for API)
+# =============================
+
+def read_all_temperatures():
+    """Returns a list of sensor payloads for all detected DS18B20 probes."""
+    return [
+        {"type": "temperature", "id": probe_id, "value": read_temperature(probe_id)}
+        for probe_id in SENSORS
+    ]
 
 # =============================
-# Read one temperature
+# Read temperature
 # =============================
 
 def read_temperature(probe_id: Optional[str] = None) -> Optional[float]:

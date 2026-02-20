@@ -1,10 +1,10 @@
 import time
 import logging
-
 from mqtt_client import MQTTNode
-from sensors import temperature
-from sensors import light
-from sensors.moisture import read_moisture
+from sensors import temperature, light
+from sensors.temperature import read_all_temperatures
+from sensors.light import read_all_light
+from sensors.moisture import read_all_moisture
 from pump import pump_control
 from config import PUBLISH_INTERVAL
 
@@ -12,36 +12,10 @@ logging.basicConfig(level=logging.INFO)
 
 def build_sensor_payload():
     sensors = []
-
-    # Temperature
-    sensors.append({
-        "type": "temperature",
-        "id": "temp-sensor-001",
-        "value": temperature.read_temperature()
-    })
-
-    # Moisture (multiple probes)
-    sensors.append({
-        "type": "moisture",
-        "id": "soil-sensor-001",
-        "value": read_moisture("soil-sensor-001")
-    })
-
-#    sensors.append({
-#        "type": "moisture",
-#        "id": "soil-sensor-002",
-#        "value": read_moisture("soil-sensor-002")
-#    })
-
-    # Light
-    sensors.append({
-        "type": "light",
-        "id": "light-sensor-001",
-        "value": light.read_light()
-    })
-
+    sensors.extend(read_all_temperatures())
+    sensors.extend(read_all_moisture())
+    sensors.extend(read_all_light())
     return sensors
-
 def main():
     # init hardware
     light.init()

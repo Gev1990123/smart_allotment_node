@@ -1,5 +1,6 @@
 # General dependencies
 python-dotenv
+digitalio
 
 # MQTT
 paho-mqtt==1.6.1
