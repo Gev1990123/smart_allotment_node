@@ -35,7 +35,7 @@ def init():
 
     for idx, device in enumerate(devices, start=1):
         device_file = os.path.join(device, "w1_slave")
-        probe_id = f"temp-{idx:03d}"
+        probe_id = f"temp-sensor-{idx:03d}"
         SENSORS[probe_id] = device_file
         logger.info(f"🌡️ Detected DS18B20: {probe_id} -> {device}")
 
