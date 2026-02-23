@@ -46,6 +46,11 @@ class MQTTNode:
         self.client.subscribe(topic, qos=1)
         logger.info(f"Subscribed to {topic} for pump commands")
 
+        read_topic = f"cmd/{DEVICE_UID}/read-now"
+        self.client.subscribe(read_topic, qos=1)
+        logger.info(f"Subscribed to {read_topic} for manual read commands")
+
+
     def publish_sensors(self, sensors):
         topic = f"sensors/{DEVICE_UID}/data"
         payload = {
@@ -63,6 +68,11 @@ class MQTTNode:
 
         if topic == f"pump/{DEVICE_UID}":
             pump_control.handle_pump_command(payload)
+
+        elif topic == f"cmd/{DEVICE_UID}/read-now":
+            requested_by = payload.get("requested_by", "unknown")
+            logger.info(f"Manual read requested by: {requested_by}")
+            self._trigger_reading()
 
     def _trigger_reading(self):
         """Take an immediate sensor reading and publish it."""
