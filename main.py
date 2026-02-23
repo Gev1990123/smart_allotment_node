@@ -16,13 +16,14 @@ def build_sensor_payload():
     sensors.extend(read_all_moisture())
     sensors.extend(read_all_light())
     return sensors
+
 def main():
     # init hardware
     light.init()
     temperature.init()
     pump_control.init()
 
-    node = MQTTNode()
+    node = MQTTNode(read_callback=build_sensor_payload)
     node.connect()
 
     while True:

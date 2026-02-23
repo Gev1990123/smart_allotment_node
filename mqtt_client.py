@@ -7,7 +7,17 @@ from pump import pump_control
 logger = logging.getLogger(__name__)
 
 class MQTTNode:
-    def __init__(self):
+    def __init__(self, read_callback=None):
+        """
+        read_callback: callable that returns a list of sensor dicts, e.g:
+            [
+                {"type": "moisture", "id": "soil-sensor-001", "value": 65},
+                {"type": "temperature", "id": "temp-sensor-001", "value": 18.2},
+                {"type": "light", "id": "light-sensor-001", "value": 450}
+            ]
+        """
+
+        self.read_callback = read_callback
         self.client = mqtt.Client(client_id=DEVICE_UID)
         self.client.on_connect = self.on_connect
         self.client.on_message = self.on_message
@@ -53,3 +63,18 @@ class MQTTNode:
 
         if topic == f"pump/{DEVICE_UID}":
             pump_control.handle_pump_command(payload)
+
+    def _trigger_reading(self):
+        """Take an immediate sensor reading and publish it."""
+        if not self.read_callback:
+            logger.warning("No read_callback provided - cannot trigger manual reading")
+            return
+        try:
+            sensors = self.read_callback()
+            if sensors:
+                self.publish_sensors(sensors)
+                logger.info(f"Manual read complete - published {len(sensors)} sensors")
+            else:
+                logger.warning("Manual read returned no sensor data")
+        except Exception as e:
+            logger.error(f"Error during manual read: {e}")
