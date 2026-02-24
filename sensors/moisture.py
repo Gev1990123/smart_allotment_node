@@ -12,9 +12,9 @@ logger = logging.getLogger("moisture")
 # GPIO Power Pin Setup
 # =============================
 # Connect sensor VCC to this GPIO pin (use a transistor/MOSFET for >3.3V sensors)
-power_pin = digitalio.DigitalInOut(board.D27)  # Change to your GPIO pin
-power_pin.direction = digitalio.Direction.OUTPUT
-power_pin.value = False  # Start with sensor OFF
+#power_pin = digitalio.DigitalInOut(board.D27)  # Change to your GPIO pin
+#power_pin.direction = digitalio.Direction.OUTPUT
+#power_pin.value = False  # Start with sensor OFF
 
 # =============================
 # I2C & ADC setup (ONE TIME)
@@ -30,7 +30,7 @@ CHANNEL_MAP = {0: P0, 1: P1, 2: P2, 3: P3}
 # =============================
 SOIL_PROBES = {
     "soil-sensor-001": {"channel": 0, "power_pin": board.D27, "dry": 2.48, "wet": 1.00},
-    #"soil-sensor-002": {"channel": 1, "power_pin": board.D22, "dry": 2.48, "wet": 1.00},
+    "soil-sensor-002": {"channel": 1, "power_pin": board.D26, "dry": 2.48, "wet": 1.00},
     # "soil-sensor-003": {"channel": 2, "power_pin": board.D23, "dry": 2.48, "wet": 1.00},
     # "soil-sensor-004": {"channel": 3, "power_pin": board.D24, "dry": 2.48, "wet": 1.00},
 }
@@ -80,21 +80,21 @@ def read_moisture(probe_id: str):
             return None
 
         # Power on the sensor
-        power_pin.value = True
+        pin.value = True
         time.sleep(0.2) 
 
         # Re-init ADC and channel after power cycle
         ads = ADS1115(i2c)
         ads.gain = 1
-        channel = AnalogIn(ads, P0)
+        channel = AnalogIn(ads, CHANNEL_MAP[cfg["channel"]])
         voltage = channel.voltage
         logger.info(f"RAW: {channel.value}, V={voltage:.3f}")
 
         # --- Power OFF ---
-        power_pin.value = False
+        pin.value = False
 
         # Clamp and convert
-        voltage = max(min(voltage, cfg["dry"]), cfg["wet"])
+        voltage = min(max(voltage, cfg["wet"]), cfg["dry"])
         percent = ((cfg["dry"] - voltage) / (cfg["dry"] - cfg["wet"])) * 100
         percent = round(percent, 1)
 
@@ -105,6 +105,6 @@ def read_moisture(probe_id: str):
         return percent
 
     except Exception as e:
-        power_pin.value = False
+        pin.value = False
         logger.error(f"Error reading {probe_id}: {e}")
         return None
