@@ -11,7 +11,7 @@ logger = logging.getLogger("light")
 # =============================
 
 # Default BH1750 I2C address (0x23 is most common)
-BH1750_ADDRESS = 0x5C
+BH1750_ADDRESS = 0x23
 LIGHT_SENSORS = {
     "light-sensor-001": BH1750_ADDRESS,
     # "light-sensor-002": 0x23,  # second sensor at alternate address
